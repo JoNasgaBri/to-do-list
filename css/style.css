@@ -1,0 +1,186 @@
+/* ---- 1. Definição da Paleta de Cores (Variáveis) ---- */
+:root {
+    --cor-fundo: #fdfaef; /* Um bege bem claro, inspirado na imagem */
+    --cor-container: #ffffff; /* Branco para os cards */
+    --cor-texto: #4a4266; /* Um roxo escuro para textos */
+    --cor-primaria: #7f5af0; /* Roxo principal para detalhes e botões */
+    --cor-secundaria: #2cb67d; /* Um verde para contraste e sucesso */
+    --cor-destaque-hover: #ffc83d; /* Amarelo/dourado para links hover */
+    --cor-erro: #e53170; /* Rosa/vermelho para botões de excluir */
+    --cor-sombra: rgba(74, 66, 102, 0.1); /* Sombra suave baseada na cor do texto */
+}
+
+/* ---- 2. Estilos Gerais com as Variáveis ---- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--cor-fundo); /* Usando a variável */
+    color: var(--cor-texto); /* Usando a variável */
+}
+
+header {
+    background-color: var(--cor-container);
+    color: var(--cor-texto);
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--cor-sombra);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav {
+    background-color: var(--cor-container);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: var(--cor-destaque-hover);
+}
+
+main {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    color: #999;
+}
+
+/* ---- 3. Estilos de Formulários com Variáveis ---- */
+.form-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--cor-texto);
+}
+
+
+/* ---- 4. Estilos de Páginas CRUD com Variáveis ---- */
+.card {
+    background-color: var(--cor-container);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--cor-sombra);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.card h2, .card h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.crud-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.crud-table th, .crud-table td {
+    border-bottom: 1px solid #eee;
+    padding: 15px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.crud-table th {
+    font-weight: bold;
+    color: #aaa;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.crud-table td:last-child {
+    display: flex;
+    gap: 8px;
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+.crud-table td .btn {
+    width: auto; /* Para os botões da tabela não ocuparem 100% */
+    padding: 8px 15px;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.btn-edit {
+    background-color: var(--cor-primaria);
+}
+.btn-edit:hover {
+    background-color: var(--cor-texto);
+}
+
+.btn-delete {
+    background-color: var(--cor-erro);
+}
+.btn-delete:hover {
+    background-color: #c42a61;
+}
