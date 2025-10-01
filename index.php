@@ -31,7 +31,7 @@
     </main>
 
     <footer>
-      <p>&copy; 2025 - Desenvolvido por [Seu Nome e Nome do Colega]</p>
+      <p>&copy; 2025 - Desenvolvido por [Jonas e Antonio]</p>
     </footer>
   </body>
 </html>

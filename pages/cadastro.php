@@ -24,8 +24,8 @@
 
     <main>
       <div class="card">
-        <h2>Crie sua Conta</h2>
-        <form action="validador.php" method="POST">
+        <h2>Crie sua Conta (Em Desenvolvimento)</h2>
+        <form action="../php/validador.php" method="POST">
           <div class="form-group">
             <label for="nome">Nome Completo:</label>
             <input type="text" id="nome" name="nome" required />
@@ -57,7 +57,7 @@
     </main>
 
     <footer>
-      <p>&copy; 2025 - Desenvolvido por [Seu Nome e Nome do Colega]</p>
+      <p>&copy; 2025 - Desenvolvido por [Jonas e Antonio]</p>
     </footer>
   </body>
 </html>
