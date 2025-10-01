@@ -5,6 +5,9 @@ $base_path = '/to-do-list/';
 // 1. INCLUIR A CONEXÃO COM O BANCO DE DADOS
 include '../php/conexao.php';
 
+// 2. INCLUIR FUNÇÕES UTILITÁRIAS
+include '../php/funcoes.php';
+
 // --- LÓGICA PARA PROCESSAR AS AÇÕES (ADICIONAR, EDITAR, EXCLUIR) ---
 
 // VERIFICA SE O FORMULÁRIO FOI ENVIADO (MÉTODO POST)
