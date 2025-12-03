@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List - Página Inicial</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>📋 Meu Gerenciador de Tarefas</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="pages/projetos.html">Meus Projetos</a></li>
+        <li><a href="pages/tarefas.html">Minhas Tarefas</a></li>
+        <li><a href="pages/categorias.html">Categorias</a></li>
+        <li><a href="pages/usuarios.html">Usuários</a></li>
+        <!-- Login/Logout dinâmico via auth.js -->
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-content">
+          <h2>Organize sua vida com eficiência! ✨</h2>
+          <p>Gerencie projetos, tarefas e categorias em um só lugar. Simples, rápido e intuitivo.</p>
+          <div class="hero-buttons">
+            <a href="pages/cadastro.html" class="btn btn-hero">Começar Agora</a>
+            <a href="pages/login.html" class="btn btn-secondary">Já tenho conta</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features">
+        <h2 class="section-title">O que você pode fazer</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📁</div>
+            <h3>Projetos</h3>
+            <p>Crie e organize seus projetos pessoais ou profissionais com facilidade.</p>
+            <a href="pages/projetos.html" class="feature-link">Gerenciar Projetos →</a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Tarefas</h3>
+            <p>Adicione tarefas, defina prazos e acompanhe seu progresso diário.</p>
+            <a href="pages/tarefas.html" class="feature-link">Ver Tarefas →</a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🏷️</div>
+            <h3>Categorias</h3>
+            <p>Organize tudo por categorias personalizadas com cores distintas.</p>
+            <a href="pages/categorias.html" class="feature-link">Criar Categorias →</a>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3>Usuários</h3>
+            <p>Gerencie usuários do sistema com busca e controle completo.</p>
+            <a href="pages/usuarios.html" class="feature-link">Ver Usuários →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-usuarios">-</div>
+            <div class="stat-label">Usuários</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-projetos">-</div>
+            <div class="stat-label">Projetos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-tarefas">-</div>
+            <div class="stat-label">Tarefas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-categorias">-</div>
+            <div class="stat-label">Categorias</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta">
+        <div class="cta-content">
+          <h2>Pronto para começar?</h2>
+          <p>Crie sua conta gratuitamente e comece a organizar suas tarefas hoje mesmo!</p>
+          <a href="pages/cadastro.html" class="btn btn-hero">Criar Conta Grátis</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 - Desenvolvido por Jonas e Antonio</p>
+    </footer>
+
+    <script>
+      // Carregar estatísticas do sistema
+      document.addEventListener("DOMContentLoaded", function() {
+        // Buscar usuários
+        fetch('php/api_usuarios.php')
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById('stat-usuarios').textContent = Array.isArray(data) ? data.length : '0';
+          })
+          .catch(() => document.getElementById('stat-usuarios').textContent = '0');
+
+        // Buscar projetos
+        fetch('php/api_projetos.php')
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById('stat-projetos').textContent = Array.isArray(data) ? data.length : '0';
+          })
+          .catch(() => document.getElementById('stat-projetos').textContent = '0');
+
+        // Buscar tarefas
+        fetch('php/api_tarefas.php')
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById('stat-tarefas').textContent = Array.isArray(data) ? data.length : '0';
+          })
+          .catch(() => document.getElementById('stat-tarefas').textContent = '0');
+
+        // Buscar categorias
+        fetch('php/api_categorias.php')
+          .then(r => r.json())
+          .then(data => {
+            document.getElementById('stat-categorias').textContent = Array.isArray(data) ? data.length : '0';
+          })
+          .catch(() => document.getElementById('stat-categorias').textContent = '0');
+      });
+    </script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>
