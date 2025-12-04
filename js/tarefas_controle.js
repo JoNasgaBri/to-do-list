@@ -1,13 +1,41 @@
+/**
+ * ============================================================
+ * ARQUIVO: tarefas_controle.js
+ * DESCRIÇÃO: Controlador CRUD para gerenciamento de tarefas
+ * 
+ * Este arquivo gerencia todas as operações de CRUD para tarefas.
+ * Cada tarefa pertence a um projeto e possui:
+ * - Título e descrição
+ * - Data limite (para controle de prazos)
+ * - Status (Pendente, Em Andamento, Concluída)
+ * 
+ * Funcionalidades especiais:
+ * - Alerta visual para tarefas vencidas (vermelho)
+ * - Alerta para tarefas próximas do vencimento (amarelo)
+ * - Contador de dias restantes/atrasados
+ * ============================================================
+ */
+
+// ============================================================
+// EVENTO: DOMContentLoaded
+// Ao carregar a página, inicio o sistema
+// ============================================================
 document.addEventListener("DOMContentLoaded", function () {
+    // Primeiro carrego os projetos para popular o select
     carregarProjetos();
+    // Depois carrego a lista de tarefas
     listarTarefas();
 
+    // Pego a referência do formulário
     const form = document.getElementById("form-tarefa");
 
-    // Evento de Salvar (Adicionar ou Editar)
+    // ============================================================
+    // EVENTO: Submit do Formulário (Adicionar ou Editar)
+    // ============================================================
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
+        // Capturo todos os valores dos campos
         const id = document.getElementById("id_tarefa").value;
         const titulo = document.getElementById("titulo_tarefa").value;
         const descricao = document.getElementById("descricao_tarefa").value;
@@ -15,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const data_limite = document.getElementById("data_limite").value;
         const status = document.getElementById("status").value;
 
+        // Monto o objeto com os dados
         const dados = { 
             id: id, 
             titulo: titulo, 
@@ -24,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             status: status
         };
 
+        // Envio para a API via POST
         fetch('../php/api_tarefas.php', {
             method: 'POST',
             headers: {
@@ -48,14 +78,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Carregar projetos no select
+// ============================================================
+// FUNÇÃO: carregarProjetos()
+// 
+// Busca os projetos da API para popular o select do formulário.
+// O usuário precisa selecionar um projeto para associar a tarefa.
+// ============================================================
 function carregarProjetos() {
+    // Passo tipo=projetos para a API retornar apenas os projetos
     fetch('../php/api_tarefas.php?tipo=projetos')
         .then(response => response.json())
         .then(projetos => {
+            // Pego a referência do select
             const select = document.getElementById("projeto_id");
+            // Reseto o select com a opção padrão
             select.innerHTML = '<option value="">Selecione um projeto</option>';
             
+            // Adiciono cada projeto como uma opção
             projetos.forEach(proj => {
                 const option = document.createElement("option");
                 option.value = proj.id;
@@ -68,7 +107,11 @@ function carregarProjetos() {
         });
 }
 
-// Função para limpar o formulário
+// ============================================================
+// FUNÇÃO: limparFormulario()
+// 
+// Reseta o formulário para o estado inicial (modo criação).
+// ============================================================
 function limparFormulario() {
     document.getElementById("form-tarefa").reset();
     document.getElementById("id_tarefa").value = "";
@@ -76,7 +119,12 @@ function limparFormulario() {
     document.getElementById("btn-salvar-tarefa").textContent = "Salvar Tarefa";
 }
 
-// Função para buscar dados do PHP e montar a tabela
+// ============================================================
+// FUNÇÃO: listarTarefas()
+// 
+// Busca as tarefas da API e monta a tabela HTML dinamicamente.
+// Esta função também implementa os alertas visuais de vencimento.
+// ============================================================
 function listarTarefas() {
     fetch('../php/api_tarefas.php')
         .then(response => response.json())
@@ -89,17 +137,26 @@ function listarTarefas() {
                 return;
             }
 
+            // Para cada tarefa, crio uma linha na tabela
             tarefas.forEach(tarefa => {
                 const tr = document.createElement("tr");
                 
-                // Adicionar classe se vencida ou próxima
+                // ============================================
+                // DESTAQUE VISUAL PARA TAREFAS VENCIDAS/PRÓXIMAS
+                // Adiciono classes CSS para colorir a linha
+                // ============================================
                 if (tarefa.vencida) {
+                    // Tarefa atrasada - fica com fundo vermelho claro
                     tr.classList.add('tarefa-vencida');
                 } else if (tarefa.proxima) {
+                    // Tarefa próxima do vencimento (3 dias) - fundo amarelo
                     tr.classList.add('tarefa-proxima-vencimento');
                 }
 
-                // Montar alerta de vencimento
+                // ============================================
+                // BADGES DE ALERTA
+                // Mostro indicadores visuais na coluna da tarefa
+                // ============================================
                 let alertaVencimento = '';
                 if (tarefa.vencida) {
                     alertaVencimento = '<span class="alerta-vencida">⚠️ VENCIDA</span>';
@@ -107,25 +164,35 @@ function listarTarefas() {
                     alertaVencimento = '<span class="alerta-proxima">🔔 PRÓXIMA</span>';
                 }
 
-                // Montar info de dias
+                // ============================================
+                // INFORMAÇÃO DE DIAS
+                // Mostro quantos dias faltam ou há quanto tempo atrasou
+                // ============================================
                 let infoDias = '';
                 if (tarefa.dias_restantes !== null) {
                     if (tarefa.dias_restantes < 0) {
+                        // Tarefa atrasada - mostro há quantos dias
                         infoDias = `<br><small>(${Math.abs(tarefa.dias_restantes)} dias atrás)</small>`;
                     } else if (tarefa.dias_restantes === 0) {
+                        // Vence hoje
                         infoDias = '<br><small>(Hoje)</small>';
                     } else {
+                        // Dias restantes
                         infoDias = `<br><small>(${tarefa.dias_restantes} dias restantes)</small>`;
                     }
                 }
 
-                // Formatar status com classe
+                // ============================================
+                // CLASSES CSS PARA O STATUS
+                // Cada status tem uma cor diferente
+                // ============================================
                 const statusClass = {
-                    'Pendente': 'status-pendente',
-                    'Em Andamento': 'status-andamento',
-                    'Concluída': 'status-concluida'
+                    'Pendente': 'status-pendente',      // Amarelo
+                    'Em Andamento': 'status-andamento', // Azul
+                    'Concluída': 'status-concluida'     // Verde
                 };
 
+                // Monto o HTML da linha
                 tr.innerHTML = `
                     <td>
                         ${escapeHtml(tarefa.titulo)}
@@ -147,7 +214,11 @@ function listarTarefas() {
         });
 }
 
-// Função para escapar HTML
+// ============================================================
+// FUNÇÃO: escapeHtml()
+// 
+// Função de segurança para prevenir ataques XSS.
+// ============================================================
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -155,8 +226,21 @@ function escapeHtml(text) {
     return div.innerHTML.replace(/'/g, "\\'").replace(/\n/g, "\\n");
 }
 
-// Preenche o formulário para edição
+// ============================================================
+// FUNÇÃO: editarTarefa()
+// 
+// Preenche o formulário com os dados da tarefa para edição.
+// 
+// Parâmetros:
+// - id: ID da tarefa
+// - titulo: título atual
+// - descricao: descrição atual
+// - projeto_id: ID do projeto associado
+// - data_limite: data limite (formato YYYY-MM-DD)
+// - status: status atual da tarefa
+// ============================================================
 function editarTarefa(id, titulo, descricao, projeto_id, data_limite, status) {
+    // Preencho todos os campos do formulário
     document.getElementById("id_tarefa").value = id;
     document.getElementById("titulo_tarefa").value = titulo;
     document.getElementById("descricao_tarefa").value = descricao;
@@ -164,12 +248,21 @@ function editarTarefa(id, titulo, descricao, projeto_id, data_limite, status) {
     document.getElementById("data_limite").value = data_limite;
     document.getElementById("status").value = status;
     
+    // Atualizo título e botão para modo edição
     document.getElementById("form-titulo-tarefa").textContent = "Editar Tarefa";
     document.getElementById("btn-salvar-tarefa").textContent = "Atualizar Tarefa";
     window.scrollTo(0, 0);
 }
 
-// Função de excluir
+// ============================================================
+// FUNÇÃO: excluirTarefa()
+// 
+// Exclui uma tarefa após confirmação.
+// 
+// Parâmetros:
+// - id: ID da tarefa
+// - titulo: título da tarefa (para mostrar no confirm)
+// ============================================================
 function excluirTarefa(id, titulo) {
     if (confirm(`Tem certeza que deseja excluir a tarefa "${titulo}"?`)) {
         fetch(`../php/api_tarefas.php?acao=excluir&id=${id}`, {
