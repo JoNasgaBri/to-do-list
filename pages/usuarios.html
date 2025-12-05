@@ -57,6 +57,18 @@
                     <label for="confirmar_senha_usuario">Confirmar Senha:</label>
                     <input type="password" id="confirmar_senha_usuario" required>
                 </div>
+                <div class="form-group">
+                    <label for="endereco_usuario">Endereço:</label>
+                    <input type="text" id="endereco_usuario" maxlength="255" required>
+                </div>
+                <div class="form-group">
+                    <label for="cidade_usuario">Cidade:</label>
+                    <input type="text" id="cidade_usuario" maxlength="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone_usuario">Telefone:</label>
+                    <input type="text" id="telefone_usuario" maxlength="15" required>
+                </div>
                 <div class="form-buttons">
                     <button type="submit" class="btn" id="btn-salvar">Cadastrar Usuário</button>
                     <button type="button" class="btn btn-secondary" onclick="limparFormulario()">Cancelar</button>
@@ -73,7 +85,8 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Email</th>
-                        <th>Data de Cadastro</th>
+                        <th>Endereço</th>
+                        <th>Telefone</th>
                         <th>Ações</th>
                     </tr>
                 </thead>

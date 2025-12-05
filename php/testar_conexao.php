@@ -10,7 +10,6 @@ echo "<hr>";
 // Inclui o arquivo de conexão
 include 'conexao.php';
 
-// Se chegou aqui, a conexão funcionou!
 echo "<div style='font-family: Arial; padding: 20px; background: #d1fae5; border: 2px solid #10b981; border-radius: 12px; margin: 20px 0; color: #065f46;'>";
 echo "<h2 style='margin-top:0;'>✅ Conexão bem-sucedida!</h2>";
 echo "<p>O sistema está conectado ao banco de dados <strong>todo_list_db</strong>.</p>";

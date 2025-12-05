@@ -43,6 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const email = document.getElementById("email_usuario").value;
         const senha = document.getElementById("senha_usuario").value;
         const confirmarSenha = document.getElementById("confirmar_senha_usuario").value;
+        const endereco = document.getElementById("endereco_usuario").value;
+        const cidade = document.getElementById("cidade_usuario").value;
+        const telefone = document.getElementById("telefone_usuario").value;
 
         // Valido se as senhas coincidem (se uma senha foi digitada)
         if (senha && senha !== confirmarSenha) {
@@ -51,11 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Monto o objeto com os dados para enviar
-        // Se é edição e a senha está vazia, não envio senha (mantém a atual)
         const dados = { 
             id: id, 
             nome: nome, 
-            email: email
+            email: email,
+            endereco: endereco,
+            cidade: cidade,
+            telefone: telefone
         };
         
         // Só adiciono a senha se foi preenchida
@@ -170,22 +175,21 @@ function listarUsuarios(pesquisa = "") {
 
             // Se não há usuários, mostro uma mensagem
             if (usuarios.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5'>Nenhum usuário encontrado.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='6'>Nenhum usuário encontrado.</td></tr>";
                 return;
             }
 
             // Para cada usuário, crio uma linha na tabela
             usuarios.forEach(user => {
                 const tr = document.createElement("tr");
-                // Uso template literals para montar o HTML
-                // escapeHtml() previne ataques XSS nos dados do usuário
                 tr.innerHTML = `
                     <td>${user.id}</td>
                     <td>${user.nome}</td>
                     <td>${user.email}</td>
-                    <td>${user.data_cadastro_formatada}</td>
+                    <td>${user.endereco_completo || '-'}</td>
+                    <td>${user.telefone || '-'}</td>
                     <td>
-                        <button class="btn btn-edit" onclick="editarUsuario(${user.id}, '${escapeHtml(user.nome)}', '${escapeHtml(user.email)}')">Editar</button>
+                        <button class="btn btn-edit" onclick="editarUsuario(${user.id})">Editar</button>
                         <button class="btn btn-delete" onclick="excluirUsuario(${user.id}, '${escapeHtml(user.nome)}')">Excluir</button>
                     </td>
                 `;
@@ -218,35 +222,48 @@ function escapeHtml(text) {
 // ============================================================
 // FUNÇÃO: editarUsuario()
 // 
-// Preenche o formulário com os dados do usuário para edição.
+// Busca os dados do usuário da API e preenche o formulário para edição.
 // Mudo o título e botão para indicar modo de edição.
 // A senha fica opcional na edição (deixar em branco mantém a atual).
 // 
 // Parâmetros:
 // - id: ID do usuário
-// - nome: nome atual do usuário
-// - email: email atual do usuário
 // ============================================================
-function editarUsuario(id, nome, email) {
-    // Preencho os campos do formulário com os dados atuais
-    document.getElementById("id_usuario").value = id;
-    document.getElementById("nome_usuario").value = nome;
-    document.getElementById("email_usuario").value = email;
-    // Limpo os campos de senha
-    document.getElementById("senha_usuario").value = "";
-    document.getElementById("confirmar_senha_usuario").value = "";
-    
-    // Na edição, a senha não é obrigatória (pode manter a atual)
-    document.getElementById("senha_usuario").required = false;
-    document.getElementById("confirmar_senha_usuario").required = false;
-    // Mostro o aviso explicando isso
-    document.getElementById("aviso-senha").style.display = "block";
-    
-    // Mudo o título e texto do botão para indicar modo edição
-    document.getElementById("form-titulo").textContent = "Editar Usuário";
-    document.getElementById("btn-salvar").textContent = "Atualizar Usuário";
-    // Rolo a página para o topo onde está o formulário
-    window.scrollTo(0, 0);
+function editarUsuario(id) {
+    // Busco os dados atualizados do usuário da API
+    fetch('../php/api_usuarios.php')
+        .then(response => response.json())
+        .then(usuarios => {
+            const user = usuarios.find(u => u.id == id);
+            if (user) {
+                // Preencho os campos do formulário com os dados atuais
+                document.getElementById("id_usuario").value = user.id;
+                document.getElementById("nome_usuario").value = user.nome;
+                document.getElementById("email_usuario").value = user.email;
+                document.getElementById("endereco_usuario").value = user.endereco || '';
+                document.getElementById("cidade_usuario").value = user.cidade || '';
+                document.getElementById("telefone_usuario").value = user.telefone || '';
+                // Limpo os campos de senha
+                document.getElementById("senha_usuario").value = "";
+                document.getElementById("confirmar_senha_usuario").value = "";
+                
+                // Na edição, a senha não é obrigatória (pode manter a atual)
+                document.getElementById("senha_usuario").required = false;
+                document.getElementById("confirmar_senha_usuario").required = false;
+                // Mostro o aviso explicando isso
+                document.getElementById("aviso-senha").style.display = "block";
+                
+                // Mudo o título e texto do botão para indicar modo edição
+                document.getElementById("form-titulo").textContent = "Editar Usuário";
+                document.getElementById("btn-salvar").textContent = "Atualizar Usuário";
+                // Rolo a página para o topo onde está o formulário
+                window.scrollTo(0, 0);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar usuário:', error);
+            alert("Erro ao carregar dados do usuário");
+        });
 }
 
 // ============================================================
